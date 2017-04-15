@@ -21,6 +21,24 @@
   "autoload": {
     "classmap": [
       "src/"
+    ],
+    "files": [
+      "src/alerts.php",
+      "src/compatibility.php",
+      "src/cron.php",
+      "src/default-constants.php",
+      "src/emails.php",
+      "src/formatting.php",
+      "src/functions.php",
+      "src/install.php",
+      "src/install-functions.php",
+      "src/install-location.php",
+      "src/locales.php",
+      "src/mimes.php",
+      "src/timezones.php",
+      "src/upgrade-funcs.php",
+      "src/user-agents.php",
+      "src/utils.php"
     ]
   },
   "minimum-stability": "dev"
