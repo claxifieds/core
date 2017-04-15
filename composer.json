@@ -23,6 +23,5 @@
       "": "src/"
     }
   },
-  "minimum-stability": "alpha",
-  "prefer-stable": true
+  "minimum-stability": "dev"
 }
