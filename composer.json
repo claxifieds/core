@@ -20,7 +20,7 @@
   },
   "autoload": {
     "classmap": [
-      "xiris/osclass-core/src/"
+      "src/"
     ]
   },
   "minimum-stability": "dev"
