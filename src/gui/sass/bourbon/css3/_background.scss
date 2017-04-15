@@ -12,16 +12,15 @@
   $fallback: false
 ) {
   $backgrounds: compact($background-1, $background-2,
-                $background-3, $background-4,
-                $background-5, $background-6,
-                $background-7, $background-8,
-                $background-9, $background-10);
+          $background-3, $background-4,
+          $background-5, $background-6,
+          $background-7, $background-8,
+          $background-9, $background-10);
 
   $fallback-color: false;
   @if (type-of($fallback) == color) or ($fallback == "transparent") {
     $fallback-color: $fallback;
-  }
-  @else {
+  } @else {
     $fallback-color: extract-background-color($backgrounds);
   }
 
@@ -48,7 +47,6 @@
   @return false;
 }
 
-
 @function background-add-prefix($backgrounds, $vendor: false) {
   $backgrounds-prefixed: ();
 
@@ -72,7 +70,7 @@
           $gradient-args: nth($first-member, 2);
           $shorthand-start: 2;
         }
-        // Linear gradient only
+          // Linear gradient only
         @else {
           $gradient-args: nth($shorthand, 2); // Get actual gradient (red, blue)
           $shorthand-start: 3;
@@ -85,14 +83,14 @@
         $backgrounds-prefixed: append($backgrounds-prefixed, $gradient, comma);
       }
 
-      // Image with additional properties
+        // Image with additional properties
       @else {
         $backgrounds-prefixed: append($backgrounds-prefixed, $shorthand, comma);
       }
 
     }
 
-    // If shorthand is a simple string, color or image
+      // If shorthand is a simple string, color or image
     @else if $type == string {
       $backgrounds-prefixed: join($backgrounds-prefixed, $shorthand, comma);
     }
@@ -101,7 +99,7 @@
 }
 
 //Examples:
-  //@include background(linear-gradient(top, orange, red));
-  //@include background(radial-gradient(50% 50%, cover circle, orange, red));
-  //@include background(url("/images/a.png") no-repeat, linear-gradient(orange, red));
-  //@include background(url("image.png") center center, linear-gradient(orange, red), url("image.png"));
+//@include background(linear-gradient(top, orange, red));
+//@include background(radial-gradient(50% 50%, cover circle, orange, red));
+//@include background(url("/images/a.png") no-repeat, linear-gradient(orange, red));
+//@include background(url("image.png") center center, linear-gradient(orange, red), url("image.png"));

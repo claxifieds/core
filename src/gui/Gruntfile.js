@@ -1,19 +1,19 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         theme: grunt.file.readJSON('themes.json'),
-        replace: { },
+        replace: {},
         watch: {
             template: {
                 files: ['sass/colors.scss.tpl', 'index.php.tpl'],
                 tasks: ['template:blue']
             }
         },
-        shell: { },
-        template: { },
+        shell: {},
+        template: {},
         sass: {
             dist: {
                 options: {
@@ -25,15 +25,15 @@ module.exports = function(grunt) {
                 }
             }
         },
-        copy: { }
+        copy: {}
     });
 
     var themeObj = grunt.config.get('theme');
     var pkg = grunt.config.get('pkg');
-    for ( var key in themeObj ) {
+    for (var key in themeObj) {
         var theme = themeObj[key];
 
-        grunt.config( 'template.' + key, {
+        grunt.config('template.' + key, {
             options: {
                 data: {
                     theme: themeObj[key],
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
         });
 
         // copy scss files, compile sass, copy to root + replace variables
-        grunt.config( 'watch.' + key, {
+        grunt.config('watch.' + key, {
             files: ['sass/**'],
             tasks: ['template:' + key, 'sass'],
             options: {
@@ -55,7 +55,7 @@ module.exports = function(grunt) {
             }
         });
 
-        grunt.config( 'copy.' + key, {
+        grunt.config('copy.' + key, {
             files: [
                 {
                     expand: true,
@@ -75,7 +75,7 @@ module.exports = function(grunt) {
             ]
         });
 
-        grunt.config( 'copy.screenshoot_' + key, {
+        grunt.config('copy.screenshoot_' + key, {
             files: [
                 {
                     expand: false,
@@ -88,7 +88,7 @@ module.exports = function(grunt) {
         });
 
         // replace theme strings
-        grunt.config( 'replace.'+ key , {
+        grunt.config('replace.' + key, {
             src: [
                 'dist/' + theme.slug + '/*.php',
                 'dist/' + theme.slug + '/admin/*.php',
@@ -112,9 +112,9 @@ module.exports = function(grunt) {
             ]
         });
 
-        var archive = '../packages/theme_'+ theme.slug + '_' + pkg.version + '.zip';
-        grunt.config( 'shell.compress_'+ key , {
-            command : 'cd dist/; zip -r ' + archive + ' ' + theme.slug + '/;',
+        var archive = '../packages/theme_' + theme.slug + '_' + pkg.version + '.zip';
+        grunt.config('shell.compress_' + key, {
+            command: 'cd dist/; zip -r ' + archive + ' ' + theme.slug + '/;',
             options: {
                 stdout: false
             }

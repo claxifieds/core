@@ -1,5 +1,5 @@
-$(document).ready(function(){
-    $(".opt_delete_account a").click(function(){
+$(document).ready(function () {
+    $(".opt_delete_account a").click(function () {
         $("#dialog-delete-account").dialog('open');
     });
 
@@ -9,13 +9,13 @@ $(document).ready(function(){
         buttons: [
             {
                 text: bender.langs.delete,
-                click: function() {
-                    window.location = bender.base_url + '?page=user&action=delete&id=' + bender.user.id  + '&secret=' + bender.user.secret;
+                click: function () {
+                    window.location = bender.base_url + '?page=user&action=delete&id=' + bender.user.id + '&secret=' + bender.user.secret;
                 }
             },
             {
                 text: bender.langs.cancel,
-                click: function() {
+                click: function () {
                     $(this).dialog("close");
                 }
             }

@@ -1,4 +1,4 @@
-<?php if ( ! defined('ABS_PATH')) exit('ABS_PATH is not loaded. Direct access is not allowed.');
+<?php if (!defined('ABS_PATH')) exit('ABS_PATH is not loaded. Direct access is not allowed.');
 
 /*
  * Copyright 2014 Osclass
@@ -16,45 +16,46 @@
  * limitations under the License.
  */
 
-    class CWebMain extends BaseModel
+class CWebMain extends BaseModel
+{
+    function __construct()
     {
-        function __construct()
-        {
-            parent::__construct();
-            osc_run_hook( 'init_main' );
-        }
+        parent::__construct();
+        osc_run_hook('init_main');
+    }
 
-        //Business Layer...
-        function doModel()
-        {
-            switch($this->action) {
-                case('logout'):         // unset only the required parameters in Session
-                                        osc_run_hook("logout");
+    //Business Layer...
+    function doModel()
+    {
+        switch ($this->action) {
+            case('logout'):         // unset only the required parameters in Session
+                osc_run_hook("logout");
 
-                                        Session::newInstance()->_drop('userId');
-                                        Session::newInstance()->_drop('userName');
-                                        Session::newInstance()->_drop('userEmail');
-                                        Session::newInstance()->_drop('userPhone');
+                Session::newInstance()->_drop('userId');
+                Session::newInstance()->_drop('userName');
+                Session::newInstance()->_drop('userEmail');
+                Session::newInstance()->_drop('userPhone');
 
-                                        Cookie::newInstance()->pop('oc_userId');
-                                        Cookie::newInstance()->pop('oc_userSecret');
-                                        Cookie::newInstance()->set();
+                Cookie::newInstance()->pop('oc_userId');
+                Cookie::newInstance()->pop('oc_userSecret');
+                Cookie::newInstance()->set();
 
-                                        $this->redirectTo( osc_base_url() );
+                $this->redirectTo(osc_base_url());
                 break;
-                default:                $this->doView('main.php');
-            }
-        }
-
-        //hopefully generic...
-        function doView($file)
-        {
-            osc_run_hook("before_html");
-            osc_current_web_theme_path($file);
-            Session::newInstance()->_clearVariables();
-            osc_run_hook("after_html");
+            default:
+                $this->doView('main.php');
         }
     }
 
-    /* file end: ./main.php */
+    //hopefully generic...
+    function doView($file)
+    {
+        osc_run_hook("before_html");
+        osc_current_web_theme_path($file);
+        Session::newInstance()->_clearVariables();
+        osc_run_hook("after_html");
+    }
+}
+
+/* file end: ./main.php */
 ?>

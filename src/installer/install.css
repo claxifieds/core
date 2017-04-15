@@ -6,18 +6,18 @@ html, body {
 }
 
 body {
-    font-family:verdana,arial,sans-serif;
+    font-family: verdana, arial, sans-serif;
     font-size: 13px;
 }
 
-img { 
-    border:0;
-    padding:0;
+img {
+    border: 0;
+    padding: 0;
     margin: 0;
 }
 
 .clear {
-    clear:both;
+    clear: both;
     height: 0;
 }
 
@@ -29,7 +29,7 @@ img {
     border-radius: 10px;
     -khtml-border-radius: 10px;
     -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;    
+    -webkit-border-radius: 10px;
 }
 
 #container {
@@ -54,7 +54,7 @@ ul#nav {
 }
 
 ul#nav li {
-    float:left;
+    float: left;
     padding: 10px 30px;
 }
 
@@ -81,7 +81,7 @@ a:hover {
     border-bottom: none;
 }
 
-.readme h1{
+.readme h1 {
     text-align: center;
     margin-bottom: 0px;
     font-size: 20px;
@@ -253,7 +253,7 @@ h2.title {
 h3.title {
     color: #444444;
     margin: 0px;
-    float:right;
+    float: right;
     border-bottom: 1px solid grey;
 }
 
@@ -277,7 +277,7 @@ div.admin-user {
 }
 
 .left {
-    float:left;
+    float: left;
 }
 
 .left h3 {
@@ -286,7 +286,7 @@ div.admin-user {
 }
 
 .right {
-    float:right;
+    float: right;
 }
 
 .right a, .right .a:hover {
@@ -357,6 +357,7 @@ table.list-categories td {
 .space-left-25 {
     margin-left: 25px;
 }
+
 .space-left-60 {
     margin-left: 60px;
 }
@@ -370,13 +371,13 @@ table.list-categories td {
 }
 
 .box {
-    background:none repeat scroll 0 0 white;
+    background: none repeat scroll 0 0 white;
     padding: 3px 5px;
-    width:500px;
+    width: 500px;
     -khtml-box-shadows: inset 0 0 3px #cccccc;
-    -moz-box-shadow:inset 0 0 3px #cccccc;
-    -webkit-box-shadow:inset 0 0 3px #ccccc;
-    box-shadow:inset 0 0 3px #cccccc;
+    -moz-box-shadow: inset 0 0 3px #cccccc;
+    -webkit-box-shadow: inset 0 0 3px #ccccc;
+    box-shadow: inset 0 0 3px #cccccc;
     border-bottom: 1px solid #dddddd;
     border-right: 1px solid #bbbbbb;
     border-left: 1px solid #bbbbbb;
@@ -395,7 +396,7 @@ table.list-categories td {
 
 #region-info a {
     color: blue;
-	text-decoration:underline;
+    text-decoration: underline;
 }
 
 #location span {
@@ -410,7 +411,7 @@ table.list-categories td {
     border: 1px solid grey;
     margin: 5px;
     background: #F3F3F3;
-    float:left;
+    float: left;
 }
 
 #location input {
@@ -418,7 +419,7 @@ table.list-categories td {
     margin: 5px;
 }
 
-#location span a{
+#location span a {
     margin: 0 5px;
     text-decoration: none;
     color: #999999;
@@ -454,9 +455,9 @@ table.list-categories td {
     padding-bottom: 10px;
     border-bottom: 1px solid #BBBBBB;
     border-right: 1px solid #BBBBBB;
-    border-left:1px solid #BBBBBB;
+    border-left: 1px solid #BBBBBB;
     margin: 0;
-    float:left;
+    float: left;
 }
 
 .ui-autocomplete a {
@@ -483,8 +484,8 @@ table.list-categories td {
 }
 
 .question-skip {
-   margin-top:2px;
-   margin-left:5px;
+    margin-top: 2px;
+    margin-left: 5px;
 }
 
 #footer {
@@ -516,7 +517,7 @@ table.list-categories td {
     text-decoration: underline;
 }
 
-#resources a{
+#resources a {
     text-decoration: none;
     color: blue;
 }
@@ -534,7 +535,7 @@ table.list-categories td {
 }
 
 #location-error {
-    color:red;
+    color: red;
 }
 
 .page-error {

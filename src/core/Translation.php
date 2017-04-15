@@ -1,4 +1,4 @@
-<?php if ( ! defined('ABS_PATH')) exit('ABS_PATH is not loaded. Direct access is not allowed.');
+<?php if (!defined('ABS_PATH')) exit('ABS_PATH is not loaded. Direct access is not allowed.');
 
 /*
  * Copyright 2014 Osclass
@@ -16,93 +16,100 @@
  * limitations under the License.
  */
 
-    class Translation {
-        private $messages;
-        private static $instance;
+class Translation
+{
+    private static $instance;
+    private $messages;
 
-        public static function newInstance($install = false) {
-            if(!self::$instance instanceof self) {
-                self::$instance = new self($install);
-            }
-            return self::$instance;
-        }
-
-        public static function init() {
-            self::$instance = new self();
-            return self::$instance;
-        }
-
-        function __construct($install = false) {
-            if(!$install) {
-                // get user/admin locale
-                if( OC_ADMIN ) {
-                    $locale = osc_current_admin_locale();
-                } else {
-                    $locale = osc_current_user_locale();
-                }
-
-                // load core
-                $core_file = osc_apply_filter('mo_core_path', osc_translations_path() . $locale . '/core.mo', $locale);
-                $this->_load($core_file, 'core');
-
-                // load messages
-                $domain = osc_theme();
-                $messages_file = osc_apply_filter('mo_theme_messages_path', osc_themes_path() . $domain . '/languages/' . $locale . '/messages.mo', $locale, $domain);
-                if(!file_exists($messages_file)) {
-                    $messages_file = osc_apply_filter('mo_core_messages_path', osc_translations_path() . $locale . '/messages.mo', $locale);
-                }
-                $this->_load($messages_file, 'messages');
-
-                // load theme
-                $theme_file = osc_apply_filter('mo_theme_path', osc_themes_path() . $domain . '/languages/' . $locale . '/theme.mo', $locale, $domain);
-                if(!file_exists($theme_file)) {
-                    if(!file_exists(osc_themes_path() . $domain)) {
-                        $domain = 'modern';
-                    }
-                    $theme_file = osc_translations_path() . $locale . '/theme.mo';
-                }
-                $this->_load($theme_file, $domain);
-
-                // load plugins
-                $aPlugins = Plugins::listEnabled();
-                foreach($aPlugins as $plugin) {
-                    $domain = preg_replace('|/.*|', '', $plugin);
-                    $plugin_file = osc_apply_filter('mo_plugin_path', osc_plugins_path() . $domain . '/languages/' . $locale . '/messages.mo', $locale, $domain);
-                    if(file_exists($plugin_file) ) {
-                        $this->_load($plugin_file, $domain);
-                    }
-                }
+    function __construct($install = false)
+    {
+        if (!$install) {
+            // get user/admin locale
+            if (OC_ADMIN) {
+                $locale = osc_current_admin_locale();
             } else {
-                $core_file = osc_translations_path() . osc_current_admin_locale() . '/core.mo';
-                $this->_load($core_file, 'core');
-            }
-        }
-
-        function _get($domain) {
-            if(!isset($this->messages[$domain])) {
-                return false;
+                $locale = osc_current_user_locale();
             }
 
-            return $this->messages[$domain];
-        }
+            // load core
+            $core_file = osc_apply_filter('mo_core_path', osc_translations_path() . $locale . '/core.mo', $locale);
+            $this->_load($core_file, 'core');
 
-        function _set($domain, $reader) {
-            if(isset($messages[$domain])) {
-               false;
+            // load messages
+            $domain = osc_theme();
+            $messages_file = osc_apply_filter('mo_theme_messages_path', osc_themes_path() . $domain . '/languages/' . $locale . '/messages.mo', $locale, $domain);
+            if (!file_exists($messages_file)) {
+                $messages_file = osc_apply_filter('mo_core_messages_path', osc_translations_path() . $locale . '/messages.mo', $locale);
             }
+            $this->_load($messages_file, 'messages');
 
-            $this->messages[$domain] = $reader;
-            return true;
-        }
-
-        function _load($file, $domain) {
-            if(!file_exists($file)) {
-                return false;
+            // load theme
+            $theme_file = osc_apply_filter('mo_theme_path', osc_themes_path() . $domain . '/languages/' . $locale . '/theme.mo', $locale, $domain);
+            if (!file_exists($theme_file)) {
+                if (!file_exists(osc_themes_path() . $domain)) {
+                    $domain = 'modern';
+                }
+                $theme_file = osc_translations_path() . $locale . '/theme.mo';
             }
+            $this->_load($theme_file, $domain);
 
-            $streamer = new FileReader($file);
-            $reader = new gettext_reader($streamer);
-            return $this->_set($domain, $reader);
+            // load plugins
+            $aPlugins = Plugins::listEnabled();
+            foreach ($aPlugins as $plugin) {
+                $domain = preg_replace('|/.*|', '', $plugin);
+                $plugin_file = osc_apply_filter('mo_plugin_path', osc_plugins_path() . $domain . '/languages/' . $locale . '/messages.mo', $locale, $domain);
+                if (file_exists($plugin_file)) {
+                    $this->_load($plugin_file, $domain);
+                }
+            }
+        } else {
+            $core_file = osc_translations_path() . osc_current_admin_locale() . '/core.mo';
+            $this->_load($core_file, 'core');
         }
     }
+
+    function _load($file, $domain)
+    {
+        if (!file_exists($file)) {
+            return false;
+        }
+
+        $streamer = new FileReader($file);
+        $reader = new gettext_reader($streamer);
+        return $this->_set($domain, $reader);
+    }
+
+    function _set($domain, $reader)
+    {
+        if (isset($messages[$domain])) {
+            false;
+        }
+
+        $this->messages[$domain] = $reader;
+        return true;
+    }
+
+    public static function newInstance($install = false)
+    {
+        if (!self::$instance instanceof self) {
+            self::$instance = new self($install);
+        }
+        return self::$instance;
+    }
+
+    public static function init()
+    {
+        self::$instance = new self();
+        return self::$instance;
+    }
+
+    function _get($domain)
+    {
+        if (!isset($this->messages[$domain])) {
+            return false;
+        }
+
+        return $this->messages[$domain];
+    }
+}
 

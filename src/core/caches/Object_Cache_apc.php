@@ -1,17 +1,19 @@
 <?php
+
 /**
  * Object_Cache_apc class
  */
-class Object_Cache_apc implements iObject_Cache{
+class Object_Cache_apc implements iObject_Cache
+{
 
-   /**
+    /**
      * Holds the cached objects
      *
      * @var array
      * @access private
      * @since 3.4
      */
-    var $cache = array ();
+    var $cache = array();
 
     /**
      * The amount of times the cache data was already stored in the cache.
@@ -43,6 +45,38 @@ class Object_Cache_apc implements iObject_Cache{
     var $default_expiration = 60;
 
     /**
+     * Sets up object properties; PHP 5 style constructor
+     *
+     * @since 3.4
+     */
+    function __construct()
+    {
+
+        $this->multisite = false;
+//        if(SiteInfo::newInstance()->siteInfo!=array()) {
+//            $info       = SiteInfo::newInstance()->siteInfo;
+//            $site_id    = osc_sanitizeString($info);
+//            $this->multisite = true;
+//        }
+        $site_id = '';
+        $this->site_prefix = $this->multisite ? $site_id . ':' : '';
+    }
+
+    /**
+     * is_supported()
+     *
+     * Check to see if APC is available on this system, bail if it isn't.
+     */
+    static function is_supported()
+    {
+        if (!extension_loaded('apc') OR ini_get('apc.enabled') != "1") {
+            error_log('The APC PHP extension must be loaded to use APC Cache.');
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Adds data to the cache if it doesn't already exist.
      * @since 3.4
      *
@@ -51,26 +85,27 @@ class Object_Cache_apc implements iObject_Cache{
      * @param int $expire When to expire the cache contents
      * @return bool False if cache key and group already exist, true on success
      */
-    function add( $key, $data, $expire = 0 ) {
+    function add($key, $data, $expire = 0)
+    {
         $id = $key;
-        if ( $this->multisite ) {
+        if ($this->multisite) {
             $id = $this->site_prefix . $key;
         }
 
-        if ( is_object( $data ) ) {
-                $data = clone $data;
+        if (is_object($data)) {
+            $data = clone $data;
         }
 
         $store_data = $data;
 
-        if ( is_array( $data ) ) {
-            $store_data = new ArrayObject( $data );
+        if (is_array($data)) {
+            $store_data = new ArrayObject($data);
         }
 
-        $expire = ( $expire == 0 ) ? $this->default_expiration : $expire;
-        $result = apc_add( $id, $store_data, $expire );
-        if ( false !== $result ) {
-                $this->cache[$key] = $data;
+        $expire = ($expire == 0) ? $this->default_expiration : $expire;
+        $result = apc_add($id, $store_data, $expire);
+        if (false !== $result) {
+            $this->cache[$key] = $data;
         }
 
         return $result;
@@ -83,15 +118,16 @@ class Object_Cache_apc implements iObject_Cache{
      * @param int|string $key What the contents in the cache are called
      * @return bool False if the contents weren't deleted and true on success
      */
-    function delete($key) {
+    function delete($key)
+    {
 
-        if ( $this->multisite ) {
+        if ($this->multisite) {
             $key = $this->site_prefix . $key;
         }
 
-        $result = apc_delete( $key );
-        if ( false !== $result ) {
-                unset( $this->cache[$key] );
+        $result = apc_delete($key);
+        if (false !== $result) {
+            unset($this->cache[$key]);
         }
         return $result;
     }
@@ -102,8 +138,9 @@ class Object_Cache_apc implements iObject_Cache{
      *
      * @return bool Always returns true
      */
-    function flush() {
-        $this->cache = array ();
+    function flush()
+    {
+        $this->cache = array();
         if (extension_loaded('apcu')) {
             return apc_clear_cache();
         } else {
@@ -119,15 +156,16 @@ class Object_Cache_apc implements iObject_Cache{
      * @param int|string $key What the contents in the cache are called
      * @param bool $found if can be retrieved from cache
      * @return bool|mixed False on failure to retrieve contents or the cache
-     *		contents on success
+     *        contents on success
      */
-    function get( $key, &$found = null ) {
+    function get($key, &$found = null)
+    {
 
-        if ( $this->multisite )
+        if ($this->multisite)
             $key = $this->site_prefix . $key;
 
-        if ( isset($this->cache[$key])) {
-            if ( is_object( $this->cache[$key] ) ) {
+        if (isset($this->cache[$key])) {
+            if (is_object($this->cache[$key])) {
                 $value = clone $this->cache[$key];
             } else {
                 $value = $this->cache[$key];
@@ -135,16 +173,16 @@ class Object_Cache_apc implements iObject_Cache{
             $this->cache_hits += 1;
             $return = $value;
         } else {
-            $value = apc_fetch( $key , $found);
+            $value = apc_fetch($key, $found);
 
-            if ( is_object( $value ) && 'ArrayObject' == get_class( $value ) ) {
+            if (is_object($value) && 'ArrayObject' == get_class($value)) {
                 $value = $value->getArrayCopy();
             }
-            if ( NULL === $value ) {
+            if (NULL === $value) {
                 $value = false;
             }
-            $this->cache[$key] = ( is_object( $value ) ) ? clone $value : $value;
-            if($found) {
+            $this->cache[$key] = (is_object($value)) ? clone $value : $value;
+            if ($found) {
                 $this->cache_hits += 1;
                 $return = $this->cache[$key];
             } else {
@@ -162,7 +200,8 @@ class Object_Cache_apc implements iObject_Cache{
      * @since 3.0.0
      * @deprecated 3.5.0
      */
-    function reset() {
+    function reset()
+    {
         $this->cache = array();
 
     }
@@ -176,7 +215,8 @@ class Object_Cache_apc implements iObject_Cache{
      * @param int $expire Not Used
      * @return bool Always returns true on success, false on failure
      */
-    function set($key, $data, $expire = 0) {
+    function set($key, $data, $expire = 0)
+    {
         if ($this->multisite)
             $key = $this->site_prefix . $key;
 
@@ -190,7 +230,7 @@ class Object_Cache_apc implements iObject_Cache{
 
         $this->cache[$key] = $data;
 
-        $expire = ( $expire == 0 ) ? $this->default_expiration : $expire;
+        $expire = ($expire == 0) ? $this->default_expiration : $expire;
         $result = apc_store($key, $store_data, $expire);
 
         return $result;
@@ -202,7 +242,8 @@ class Object_Cache_apc implements iObject_Cache{
      *
      * @since 3.4
      */
-    function stats() {
+    function stats()
+    {
         echo "<div style='position:absolute; width:200px;top:0px;'><div style='float:right;margin-right:30px;margin-top:15px;border: 1px red solid;
 border-radius: 17px;
 padding: 1em;'><h2>APC stats</h2>";
@@ -214,52 +255,24 @@ padding: 1em;'><h2>APC stats</h2>";
         echo '</ul></div></div>';
     }
 
+    function __destruct()
+    {
+        return true;
+    }
+
+    function _get_cache()
+    {
+        return 'apc';
+    }
+
     /**
      * Utility function to determine whether a key exists in the cache.
      * @since 3.4
      *
      * @access protected
      */
-    protected function _exists( $key ) {
-        return isset( $this->cache[ $key ] );
-    }
-
-    /**
-     * Sets up object properties; PHP 5 style constructor
-     *
-     * @since 3.4
-     */
-    function __construct() {
-
-        $this->multisite = false;
-//        if(SiteInfo::newInstance()->siteInfo!=array()) {
-//            $info       = SiteInfo::newInstance()->siteInfo;
-//            $site_id    = osc_sanitizeString($info);
-//            $this->multisite = true;
-//        }
-        $site_id = '';
-        $this->site_prefix =  $this->multisite ? $site_id . ':' : '';
-    }
-
-    /**
-     * is_supported()
-     *
-     * Check to see if APC is available on this system, bail if it isn't.
-     */
-    static function is_supported()
+    protected function _exists($key)
     {
-        if ( ! extension_loaded('apc') OR ini_get('apc.enabled') != "1") {
-            error_log('The APC PHP extension must be loaded to use APC Cache.');
-            return false;
-        }
-        return true;
-    }
-
-    function __destruct() {
-        return true;
-    }
-
-    function _get_cache() {
-        return 'apc';
+        return isset($this->cache[$key]);
     }
 }

@@ -16,14 +16,10 @@
     @if length($gradient) == 2 {
       $color-stop: color-stop(nth($gradient, 2), nth($gradient, 1));
       $gradient-list: join($gradient-list, $color-stop, comma);
-    }
-
-    @else if $gradient != null {
+    } @else if $gradient != null {
       @if $i == $full-length {
         $percentage: 100%;
-      }
-
-      @else {
+      } @else {
         $percentage: ($i - 1) * (100 / ($full-length - 1)) + "%";
       }
 
@@ -34,9 +30,7 @@
 
   @if $type == radial {
     $gradient: -webkit-gradient(radial, $deprecated-pos1, $deprecated-radius1, $deprecated-pos2, $deprecated-radius2, $gradient-list);
-  }
-
-  @else if $type == linear {
+  } @else if $type == linear {
     $gradient: -webkit-gradient(linear, $deprecated-pos1, $deprecated-pos2, $gradient-list);
   }
 

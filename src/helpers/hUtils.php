@@ -28,7 +28,8 @@
  * @param string $key
  * @return array
  */
-function __get($key) {
+function __get($key)
+{
     return View::newInstance()->_get($key);
 }
 
@@ -38,7 +39,8 @@ function __get($key) {
  * @param string $key
  * @return mixed
  */
-function osc_get_param($key) {
+function osc_get_param($key)
+{
     return Params::getParam($key);
 }
 
@@ -51,19 +53,20 @@ function osc_get_param($key) {
  * @param string $locale
  * @return string
  */
-function osc_field($item, $field, $locale) {
-    if(!is_null($item)) {
-        if($locale == "") {
-            if(isset($item[$field])) {
+function osc_field($item, $field, $locale)
+{
+    if (!is_null($item)) {
+        if ($locale == "") {
+            if (isset($item[$field])) {
                 return $item[$field];
             }
         } else {
-            if(isset($item["locale"]) && !empty($item['locale']) && isset($item["locale"][$locale]) && isset($item["locale"][$locale][$field])) {
+            if (isset($item["locale"]) && !empty($item['locale']) && isset($item["locale"][$locale]) && isset($item["locale"][$locale][$field])) {
                 return $item["locale"][$locale][$field];
-            }else{
-                if(isset($item["locale"])){
-                    foreach($item["locale"] as $locale => $data) {
-                        if( isset($item["locale"][$locale][$field] ) ) {
+            } else {
+                if (isset($item["locale"])) {
+                    foreach ($item["locale"] as $locale => $data) {
+                        if (isset($item["locale"][$locale][$field])) {
                             return $item["locale"][$locale][$field];
                         }
                     }
@@ -80,7 +83,8 @@ function osc_field($item, $field, $locale) {
  * @param string $location
  * @return void
  */
-function osc_show_widgets($location) {
+function osc_show_widgets($location)
+{
     $widgets = Widget::newInstance()->findByLocation($location);
     foreach ($widgets as $w)
         echo $w['s_content'];
@@ -92,7 +96,8 @@ function osc_show_widgets($location) {
  * @param string $description
  * @return void
  */
-function osc_show_widgets_by_description($description) {
+function osc_show_widgets_by_description($description)
+{
     $widgets = Widget::newInstance()->findByDescription($description);
     foreach ($widgets as $w)
         echo $w['s_content'];
@@ -105,40 +110,42 @@ function osc_show_widgets_by_description($description) {
  * @param  string $section
  * @return void
  */
-function osc_show_recaptcha($section = '') {
-    if(osc_recaptcha_version()=="2") {
-        switch($section) {
+function osc_show_recaptcha($section = '')
+{
+    if (osc_recaptcha_version() == "2") {
+        switch ($section) {
             case('recover_password'):
-                $time  = Session::newInstance()->_get('recover_time');
-                if((time()-$time)<=1200) {
-                    echo _osc_recaptcha_get_html(osc_recaptcha_public_key(), substr(osc_language(), 0, 2))."<br />";
+                $time = Session::newInstance()->_get('recover_time');
+                if ((time() - $time) <= 1200) {
+                    echo _osc_recaptcha_get_html(osc_recaptcha_public_key(), substr(osc_language(), 0, 2)) . "<br />";
                 }
                 break;
 
             default:
-                echo _osc_recaptcha_get_html(osc_recaptcha_public_key(), substr(osc_language(), 0, 2))."<br />";
+                echo _osc_recaptcha_get_html(osc_recaptcha_public_key(), substr(osc_language(), 0, 2)) . "<br />";
                 break;
         }
     } else {
-        if( osc_recaptcha_public_key() ) {
+        if (osc_recaptcha_public_key()) {
             require_once osc_lib_path() . 'recaptchalib.php';
-            switch($section) {
+            switch ($section) {
                 case('recover_password'):
-                    $time  = Session::newInstance()->_get('recover_time');
-                    if((time()-$time)<=1200) {
-                        echo recaptcha_get_html( osc_recaptcha_public_key(), null, osc_is_ssl() )."<br />";
+                    $time = Session::newInstance()->_get('recover_time');
+                    if ((time() - $time) <= 1200) {
+                        echo recaptcha_get_html(osc_recaptcha_public_key(), null, osc_is_ssl()) . "<br />";
                     }
                     break;
 
                 default:
-                    echo recaptcha_get_html( osc_recaptcha_public_key(), null, osc_is_ssl() );
+                    echo recaptcha_get_html(osc_recaptcha_public_key(), null, osc_is_ssl());
                     break;
             }
         }
     }
 }
 
-function _osc_recaptcha_get_html($siteKey, $lang) {
+function _osc_recaptcha_get_html($siteKey, $lang)
+{
     echo '<div class="g-recaptcha" data-sitekey="' . $siteKey . '"></div>';
     echo '<script type="text/javascript" src="https://www.google.com/recaptcha/api.js?hl=' . $lang . '"></script>';
 }
@@ -149,8 +156,9 @@ function _osc_recaptcha_get_html($siteKey, $lang) {
  * @param string $date
  * @return string
  */
-function osc_format_date($date, $dateformat = null) {
-    if($dateformat==null) {
+function osc_format_date($date, $dateformat = null)
+{
+    if ($dateformat == null) {
         $dateformat = osc_date_format();
     }
 
@@ -179,7 +187,8 @@ function osc_format_date($date, $dateformat = null) {
  * @param string $string
  * @return string
  */
-function osc_escape_string($string) {
+function osc_escape_string($string)
+{
     $string = preg_replace('/^([0-9])/', '\\\\\\\\\1', $string);
     $string = preg_replace('/([a-z])/i', '\\\\\1', $string);
     return $string;
@@ -193,7 +202,7 @@ function osc_escape_string($string) {
  */
 function osc_private_user_menu($options = null)
 {
-    if($options == null) {
+    if ($options == null) {
         $options = array();
         $options[] = array('name' => __('Public Profile'), 'url' => osc_user_public_profile_url(), 'class' => 'opt_publicprofile');
         $options[] = array('name' => __('Dashboard'), 'url' => osc_user_dashboard_url(), 'class' => 'opt_dashboard');
@@ -212,13 +221,13 @@ function osc_private_user_menu($options = null)
     echo '<ul class="user_menu">';
 
     $var_l = count($options);
-    for($var_o = 0; $var_o < ($var_l-1); $var_o++) {
+    for ($var_o = 0; $var_o < ($var_l - 1); $var_o++) {
         echo '<li class="' . $options[$var_o]['class'] . '" ><a href="' . $options[$var_o]['url'] . '" >' . $options[$var_o]['name'] . '</a></li>';
     }
 
     osc_run_hook('user_menu');
 
-    echo '<li class="' . $options[$var_l-1]['class'] . '" ><a href="' . $options[$var_l-1]['url'] . '" >' . $options[$var_l-1]['name'] . '</a></li>';
+    echo '<li class="' . $options[$var_l - 1]['class'] . '" ><a href="' . $options[$var_l - 1]['url'] . '" >' . $options[$var_l - 1]['name'] . '</a></li>';
 
     echo '</ul>';
 }
@@ -229,21 +238,22 @@ function osc_private_user_menu($options = null)
  * - maxim length of text
  *
  * @param string $txt
- * @param int  $len
+ * @param int $len
  * @param string $start_tag
  * @param string $end_tag
  * @return string
  */
-function osc_highlight($txt, $len = 300, $start_tag = '<strong>', $end_tag = '</strong>') {
+function osc_highlight($txt, $len = 300, $start_tag = '<strong>', $end_tag = '</strong>')
+{
     $txt = strip_tags($txt);
-    $txt = str_replace(array("\n\r","\r\n","\n","\r","\t"), ' ', $txt);
+    $txt = str_replace(array("\n\r", "\r\n", "\n", "\r", "\t"), ' ', $txt);
     $txt = trim($txt);
     $txt = preg_replace('/\s+/', ' ', $txt);
-    if( mb_strlen($txt, 'UTF-8') > $len ) {
+    if (mb_strlen($txt, 'UTF-8') > $len) {
         $txt = mb_substr($txt, 0, $len, 'UTF-8') . "...";
     }
     $query = osc_search_pattern();
-    $query = str_replace(array('(',')','+','-','~','>','<'), array('','','','','','',''), $query);
+    $query = str_replace(array('(', ')', '+', '-', '~', '>', '<'), array('', '', '', '', '', '', ''), $query);
 
     $query = str_replace(
         array('\\', '^', '$', '.', '[', '|', '?', '*', '{', '}', '/', ']'),
@@ -253,9 +263,9 @@ function osc_highlight($txt, $len = 300, $start_tag = '<strong>', $end_tag = '</
     $query = preg_replace('/\s+/', ' ', $query);
 
     $words = array();
-    if(preg_match_all('/"([^"]*)"/', $query, $matches)) {
+    if (preg_match_all('/"([^"]*)"/', $query, $matches)) {
         $l = count($matches[1]);
-        for($k=0;$k<$l;$k++) {
+        for ($k = 0; $k < $l; $k++) {
             $words[] = $matches[1][$k];
         }
     }
@@ -263,9 +273,9 @@ function osc_highlight($txt, $len = 300, $start_tag = '<strong>', $end_tag = '</
     $query = trim(preg_replace('/\s+/', ' ', preg_replace('/"([^"]*)"/', '', $query)));
     $words = array_merge($words, explode(" ", $query));
 
-    foreach($words as $word) {
-        if($word!='') {
-            $txt = preg_replace("/(\PL|\s+|^)($word)(\PL|\s+|$)/i", "$01" . $start_tag . "$02". $end_tag . "$03", $txt);
+    foreach ($words as $word) {
+        if ($word != '') {
+            $txt = preg_replace("/(\PL|\s+|^)($word)(\PL|\s+|$)/i", "$01" . $start_tag . "$02" . $end_tag . "$03", $txt);
         }
     }
     return $txt;
@@ -275,43 +285,46 @@ function osc_highlight($txt, $len = 300, $start_tag = '<strong>', $end_tag = '</
 /**
  *
  */
-function osc_get_http_referer() {
+function osc_get_http_referer()
+{
     $ref = Rewrite::newInstance()->get_http_referer();
-    if($ref!='') {
+    if ($ref != '') {
         return $ref;
-    } else if(Session::newInstance()->_getReferer()!='') {
+    } else if (Session::newInstance()->_getReferer() != '') {
         return Session::newInstance()->_getReferer();
-    } else if(Params::existServerParam('HTTP_REFERER')){
-        if(filter_var(Params::getServerParam('HTTP_REFERER', false, false), FILTER_VALIDATE_URL)) {
+    } else if (Params::existServerParam('HTTP_REFERER')) {
+        if (filter_var(Params::getServerParam('HTTP_REFERER', false, false), FILTER_VALIDATE_URL)) {
             return Params::getServerParam('HTTP_REFERER', false, false);
         }
     }
     return '';
 }
 
-function osc_add_route($id, $regexp, $url, $file, $user_menu = false, $location = "custom", $section = "custom", $title = "Custom") {
+function osc_add_route($id, $regexp, $url, $file, $user_menu = false, $location = "custom", $section = "custom", $title = "Custom")
+{
     Rewrite::newInstance()->addRoute($id, $regexp, $url, $file, $user_menu, $location, $section, $title);
 }
 
 /**
  *
  */
-function osc_get_subdomain_params() {
+function osc_get_subdomain_params()
+{
     $options = array();
-    if(osc_subdomain_name()!='') {
-        if(Params::getParam('sCountry')!='') {
+    if (osc_subdomain_name() != '') {
+        if (Params::getParam('sCountry') != '') {
             $options['sCountry'] = Params::getParam('sCountry');
         }
-        if(Params::getParam('sRegion')!='') {
+        if (Params::getParam('sRegion') != '') {
             $options['sRegion'] = Params::getParam('sRegion');
         }
-        if(Params::getParam('sCity')!='') {
+        if (Params::getParam('sCity') != '') {
             $options['sCity'] = Params::getParam('sCity');
         }
-        if(Params::getParam('sCategory')!='') {
+        if (Params::getParam('sCategory') != '') {
             $options['sCategory'] = Params::getParam('sCategory');
         }
-        if(Params::getParam('sUser')!='') {
+        if (Params::getParam('sUser') != '') {
             $options['sUser'] = Params::getParam('sUser');
         }
     }

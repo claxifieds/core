@@ -4,9 +4,7 @@
   $vendor-gradients: false;
   @if $vendor {
     $vendor-gradients: -#{$vendor}-#{$gradient-type}-gradient($gradients);
-  }
-
-  @else if $vendor == false {
+  } @else if $vendor == false {
     $vendor-gradients: "#{$gradient-type}-gradient(#{$gradients})";
     $vendor-gradients: unquote($vendor-gradients);
   }

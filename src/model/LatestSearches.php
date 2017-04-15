@@ -1,4 +1,4 @@
-<?php if ( !defined('ABS_PATH') ) exit('ABS_PATH is not loaded. Direct access is not allowed.');
+<?php if (!defined('ABS_PATH')) exit('ABS_PATH is not loaded. Direct access is not allowed.');
 
 /*
  * Copyright 2014 Osclass
@@ -16,141 +16,144 @@
  * limitations under the License.
  */
 
+/**
+ * LastestSearches DAO
+ */
+class LatestSearches extends DAO
+{
     /**
-     * LastestSearches DAO
+     *
+     * @var type
      */
-    class LatestSearches extends DAO
+    private static $instance;
+
+    /**
+     *
+     */
+    function __construct()
     {
-        /**
-         *
-         * @var type
-         */
-        private static $instance;
-
-        public static function newInstance()
-        {
-            if( !self::$instance instanceof self ) {
-                self::$instance = new self;
-            }
-            return self::$instance;
-        }
-
-        /**
-         *
-         */
-        function __construct()
-        {
-            parent::__construct();
-            $this->setTableName('t_latest_searches');
-            $array_fields = array(
-                'd_date',
-                's_search'
-            );
-            $this->setFields($array_fields);
-        }
-
-        /**
-         * Get last searches, given a limit.
-         *
-         * @access public
-         * @since unknown
-         * @param int $limit
-         * @return array
-         */
-        function getSearches($limit = 20)
-        {
-            $this->dao->select('d_date, s_search, COUNT(s_search) as i_total');
-            $this->dao->from($this->getTableName());
-            $this->dao->groupBy('s_search');
-            $this->dao->orderBy('d_date', 'DESC');
-            $this->dao->limit($limit);
-            $result = $this->dao->get();
-
-            if( $result == false ) {
-                return false;
-            }
-
-            return $result->result();
-        }
-
-        /**
-         * Get last searches, given since time.
-         *
-         * @access public
-         * @since unknown
-         * @param int $time
-         * @return array
-         */
-        function getSearchesByDate($time = null)
-        {
-            if($time==null) { $time = time() - (7*24*3600); };
-
-            $this->dao->select('d_date, s_search, COUNT(s_search) as i_total');
-            $this->dao->from($this->getTableName());
-            $this->dao->where('d_date', date('Y-m-d H:i:s', $time));
-            $this->dao->groupBy('s_search');
-            $this->dao->orderBy('d_date', 'DESC');
-            $this->dao->limit($limit);
-            $result = $this->dao->get();
-
-            if( $result == false ) {
-                return false;
-            }
-
-            return $result->result();
-        }
-
-        /**
-         * Purge all searches by date.
-         *
-         * @access public
-         * @since unknown
-         * @param string $date
-         * @return bool
-         */
-        function purgeDate($date = null)
-        {
-            if($date == null) {
-                return false;
-            }
-
-            $this->dao->from( $this->getTableName() );
-            $this->dao->where( 'd_date <= ' . $this->dao->escape($date) );
-            return $this->dao->delete();
-        }
-
-        /**
-         * Purge n last searches.
-         *
-         * @access public
-         * @since unknown
-         * @param int $number
-         * @return bool
-         */
-        public function purgeNumber($number = null) {
-            if( $number == null ) {
-                return false;
-            }
-
-            $this->dao->select('d_date');
-            $this->dao->from($this->getTableName());
-            $this->dao->groupBy('s_search');
-            $this->dao->orderBy('d_date', 'DESC');
-            $this->dao->limit($number, 1);
-            $result = $this->dao->get();
-            $last   = $result->row();
-
-            if( $result == false ) {
-                return false;
-            }
-
-            if( $result->numRows() == 0 ) {
-                return false;
-            }
-
-            return $this->purgeDate( $last['d_date'] );
-        }
+        parent::__construct();
+        $this->setTableName('t_latest_searches');
+        $array_fields = array(
+            'd_date',
+            's_search'
+        );
+        $this->setFields($array_fields);
     }
 
-    /* file end: ./oc-includes/osclass/model/LatestSearches.php */
+    public static function newInstance()
+    {
+        if (!self::$instance instanceof self) {
+            self::$instance = new self;
+        }
+        return self::$instance;
+    }
+
+    /**
+     * Get last searches, given a limit.
+     *
+     * @access public
+     * @since unknown
+     * @param int $limit
+     * @return array
+     */
+    function getSearches($limit = 20)
+    {
+        $this->dao->select('d_date, s_search, COUNT(s_search) as i_total');
+        $this->dao->from($this->getTableName());
+        $this->dao->groupBy('s_search');
+        $this->dao->orderBy('d_date', 'DESC');
+        $this->dao->limit($limit);
+        $result = $this->dao->get();
+
+        if ($result == false) {
+            return false;
+        }
+
+        return $result->result();
+    }
+
+    /**
+     * Get last searches, given since time.
+     *
+     * @access public
+     * @since unknown
+     * @param int $time
+     * @return array
+     */
+    function getSearchesByDate($time = null)
+    {
+        if ($time == null) {
+            $time = time() - (7 * 24 * 3600);
+        };
+
+        $this->dao->select('d_date, s_search, COUNT(s_search) as i_total');
+        $this->dao->from($this->getTableName());
+        $this->dao->where('d_date', date('Y-m-d H:i:s', $time));
+        $this->dao->groupBy('s_search');
+        $this->dao->orderBy('d_date', 'DESC');
+        $this->dao->limit($limit);
+        $result = $this->dao->get();
+
+        if ($result == false) {
+            return false;
+        }
+
+        return $result->result();
+    }
+
+    /**
+     * Purge n last searches.
+     *
+     * @access public
+     * @since unknown
+     * @param int $number
+     * @return bool
+     */
+    public function purgeNumber($number = null)
+    {
+        if ($number == null) {
+            return false;
+        }
+
+        $this->dao->select('d_date');
+        $this->dao->from($this->getTableName());
+        $this->dao->groupBy('s_search');
+        $this->dao->orderBy('d_date', 'DESC');
+        $this->dao->limit($number, 1);
+        $result = $this->dao->get();
+        $last = $result->row();
+
+        if ($result == false) {
+            return false;
+        }
+
+        if ($result->numRows() == 0) {
+            return false;
+        }
+
+        return $this->purgeDate($last['d_date']);
+    }
+
+    /**
+     * Purge all searches by date.
+     *
+     * @access public
+     * @since unknown
+     * @param string $date
+     * @return bool
+     */
+    function purgeDate($date = null)
+    {
+        if ($date == null) {
+            return false;
+        }
+
+        $this->dao->from($this->getTableName());
+        $this->dao->where('d_date <= ' . $this->dao->escape($date));
+        return $this->dao->delete();
+    }
+}
+
+/* file end: ./oc-includes/osclass/model/LatestSearches.php */
 ?>

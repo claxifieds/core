@@ -21,13 +21,14 @@
     background: white;
     margin-top: 10px;
 }
+
 .qq-upload-success div.ajax_preview_img img {
     width: initial;
 }
 
 .qq-upload-list li {
-    background-color: #dff0d8!important;
-    color: #333333!important;
+    background-color: #dff0d8 !important;
+    color: #333333 !important;
     display: inline-block;
     min-height: 200px;
     margin-right: 10px;
@@ -62,6 +63,7 @@
     color: #7E0000;
     border-radius: 4px;
 }
+
 .qq-upload-status-text {
-    display:none
+    display: none
 }

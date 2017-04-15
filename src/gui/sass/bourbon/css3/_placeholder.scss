@@ -1,6 +1,6 @@
 $placeholders: '-webkit-input-placeholder',
-               '-moz-placeholder',
-               '-ms-input-placeholder';
+'-moz-placeholder',
+'-ms-input-placeholder';
 
 @mixin placeholder {
   @each $placeholder in $placeholders {
@@ -8,8 +8,7 @@ $placeholders: '-webkit-input-placeholder',
       &::#{$placeholder} {
         @content;
       }
-    }
-    @else {
+    } @else {
       &:#{$placeholder} {
         @content;
       }

@@ -17,7 +17,7 @@
      *
      *      You should have received a copy of the GNU Affero General Public
      * License along with this program.  If not, see <http://www.gnu.org/licenses/>.
-     */
+*/
 
 /*
 Theme Name: bender
@@ -30,15 +30,15 @@ Widgets:  header, footer
 Theme update URI: bender
 */
 
-    function bender_theme_info() {
-        return array(
-             'name'        => 'bender'
-            ,'version'     => '<%- pkg.version %>'
-            ,'description' => '<%- pkg.description %>'
-            ,'author_name' => '<%- pkg.author %>'
-            ,'author_url'  => 'http://osclass.org'
-            ,'locations'   => array()
-        );
-    }
+function bender_theme_info() {
+return array(
+'name'        => 'bender'
+,'version'     => '<%- pkg.version %>'
+,'description' => '<%- pkg.description %>'
+,'author_name' => '<%- pkg.author %>'
+,'author_url'  => 'http://osclass.org'
+,'locations'   => array()
+);
+}
 
 ?>
