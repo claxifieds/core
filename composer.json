@@ -1,5 +1,5 @@
 {
-  "name": "osclass/core",
+  "name": "xiris/osclass-core",
   "description": "OSclass core framework",
   "license": "Apache-2.0",
   "type": "library",
