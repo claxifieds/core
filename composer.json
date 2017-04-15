@@ -19,9 +19,9 @@
     "pdepend/pdepend": "2.4.0"
   },
   "autoload": {
-    "psr-0": {
-      "": "src/"
-    }
+    "classmap": [
+      "xiris/osclass-core/src/"
+    ]
   },
   "minimum-stability": "dev"
 }
